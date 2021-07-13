@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="memberSQL">
+ 
+<insert id="write" parameterType="member" >
+ 	insert into member values(#{name},
+ 								#{id},
+ 								#{pwd},
+ 								#{gender},
+ 								#{email1},
+ 								#{email2},
+ 								#{tel1},
+ 								#{tel2},
+ 								#{tel3},
+ 								#{zipcode},
+ 								#{addr1},
+ 								#{addr2},
+ 								sysdate) 
+</insert>	
+
+<!-- 로그인  -->
+<select id="loginCheck" parameterType="java.util.Map" resultType="member"> <!-- 1행의 데이터를 어디에 담을예정?  -->
+ 	<!-- resultType="패키지.class명"  -->
+ 	select * from member where id=#{id} and pwd=#{pwd}
+</select>
+
+<!-- ID중복체크  --> 
+<select id="checkId" parameterType="String" resultType="String"> 
+ 	select * from member where id = #{id}
+</select>
+
+<!-- 우편번호  --> 
+<select id="checkPostSearch" parameterType="java.util.Map" resultType="zipcode"> 
+<!--select * from newzipcode where sido like #{sido} and nvl(sigungu, 0) like #{sigungu} and roadname like #{roadname}	  --> 	
+select * from newzipcode where sido like '%'||#{sido}||'%' and nvl(sigungu, 0) like '%'||#{sigungu}||'%' and roadname like '%'||#{roadname}||'%'	 	
+</select>
+
+<!--   --> 
+<select id="getMemberList" parameterType="String" resultType="member"> 
+ 	select * from member where id = #{id}
+</select>
+
+<!-- 회원정보수정  --> 
+<update id="modifyUpdate" parameterType="member">
+ 	update member set name=#{name},pwd=#{pwd},gender=#{gender},email1=#{email1},email2=#{email2},tel1=#{tel1},tel2=#{tel2},tel3=#{tel3},zipcode=#{zipcode},addr1=#{addr1},addr2=#{addr2},logtime=sysdate where id=#{id} 
+ </update>
+ 
+ <select id="getUser" parameterType="String" resultType="member">
+ 	select * from member where id=#{id}
+ </select>
+
+ </mapper>
